@@ -1,728 +1,406 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FISTO POOL | Documentation</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Fira+Code:wght@400;600&display=swap');
-
-        :root {
-            --bg-dark: #020617;
-            --card-bg: rgba(15, 23, 42, 0.6);
-            --card-border: rgba(255, 255, 255, 0.15);
-            --primary: #38bdf8; /* Bright Cyan */
-            --secondary: #818cf8; /* Bright Indigo */
-            --accent: #22d3ee; /* Electric Cyan */
-            --text-main: #ffffff; /* Pure White */
-            --text-muted: #cbd5e1; /* Light Grey - brightened */
-            --code-bg: #0f172a;
-            --glow-text: 0 0 15px rgba(56, 189, 248, 0.5);
-            --glow-box: 0 0 20px rgba(56, 189, 248, 0.15);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* AMBIENT BACKGROUND ANIMATION */
-        .ambient-light {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.15), transparent 30%),
-                radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.15), transparent 30%);
-            animation: pulse 8s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.1); }
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-
-        /* HEADER */
-        header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 80px;
-            animation: fadeInDown 1s ease-out;
-            text-align: center;
-        }
-
-        .logo {
-            width: 140px; 
-            height: auto;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
-        }
-
-        h1 {
-            font-size: 4.5rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin: 0;
-            color: #fff;
-            text-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
-            background: linear-gradient(to bottom, #ffffff 40%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            font-family: 'Fira Code', monospace;
-            color: var(--accent);
-            font-size: 1.1rem;
-            margin-top: 10px;
-            letter-spacing: 2px;
-            text-shadow: var(--glow-text);
-        }
-
-        /* SOCIALS BAR */
-        .social-bar {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 24px;
-            border-radius: 50px;
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .social-link svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-            transition: transform 0.3s ease;
-        }
-
-        .social-link:hover {
-            background: rgba(56, 189, 248, 0.2);
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-            transform: translateY(-2px);
-        }
-        
-        .social-link:hover svg {
-            transform: scale(1.1);
-        }
-
-        /* PROTOCOL SECTION */
-        .protocol-card {
-            background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--primary);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 80px;
-            box-shadow: var(--glow-box);
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .protocol-title {
-            display: flex;
-            align-items: center;
-            color: var(--accent);
-            font-size: 1.5rem;
-            margin-top: 0;
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 20px;
-            text-shadow: 0 0 10px var(--accent);
-        }
-
-        .rules-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .rules-list li {
-            position: relative;
-            padding-left: 24px;
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        .rules-list li::before {
-            content: "›";
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.4rem;
-            line-height: 1;
-            text-shadow: 0 0 8px var(--primary);
-        }
-
-        /* SECTIONS */
-        .day-section {
-            margin-bottom: 80px;
-            animation: fadeInUp 1s ease-out both;
-        }
-
-        .day-section:nth-of-type(2) { animation-delay: 0.3s; }
-        .day-section:nth-of-type(3) { animation-delay: 0.4s; }
-        .day-section:nth-of-type(4) { animation-delay: 0.5s; }
-        .day-section:nth-of-type(5) { animation-delay: 0.6s; }
-        .day-section:nth-of-type(6) { animation-delay: 0.7s; }
-
-        .day-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 32px;
-            padding-left: 15px;
-            border-left: 4px solid var(--primary);
-            box-shadow: -5px 0 15px -5px rgba(56, 189, 248, 0.5);
-        }
-
-        .day-header h2 {
-            font-size: 2.2rem;
-            margin: 0;
-            color: #fff;
-            font-weight: 700;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .day-meta {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            color: var(--primary);
-            background: rgba(56, 189, 248, 0.1);
-            padding: 6px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            text-shadow: 0 0 5px var(--primary);
-        }
-
-        /* GRID */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 24px;
-        }
-
-        /* CARDS */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 28px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            opacity: 0.5;
-            box-shadow: 0 0 10px var(--primary);
-            transition: opacity 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(56, 189, 248, 0.4);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.15);
-            background: rgba(30, 41, 59, 0.8);
-        }
-
-        .card:hover::before { opacity: 1; height: 3px; }
-
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin: 0;
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        .card:hover .card-title {
-            color: var(--primary);
-            text-shadow: 0 0 10px var(--primary);
-        }
-
-        .badge {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
-            border: 1px solid var(--card-border);
-        }
-
-        .card:hover .badge {
-            color: var(--primary);
-            border-color: var(--primary);
-            background: rgba(56, 189, 248, 0.15);
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-        }
-
-        .card-desc {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin: 0 0 20px 0;
-            flex-grow: 1;
-        }
-
-        /* CODE BLOCK FIX */
-        .code-wrapper {
-            background: var(--code-bg);
-            border-radius: 8px;
-            padding: 16px;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        pre { 
-            margin: 0; 
-            white-space: pre-wrap;      
-            word-wrap: break-word;       
-            overflow-x: hidden;          
-        }
-
-        code {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            color: #e2e8f0;
-        }
-
-        /* Syntax Highlighting Sim */
-        .kwd { color: #c084fc; text-shadow: 0 0 5px rgba(192, 132, 252, 0.4); }
-        .func { color: #38bdf8; text-shadow: 0 0 5px rgba(56, 189, 248, 0.4); }
-        .arg { color: #fcd34d; } 
-
-        /* BOSS LEVEL */
-        .boss-card {
-            grid-column: 1 / -1;
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-            border: 1px solid var(--secondary);
-            text-align: center;
-            padding: 60px;
-            box-shadow: 0 0 30px rgba(129, 140, 248, 0.2);
-        }
-
-        .boss-card h3 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            color: #fff;
-            text-shadow: 0 0 20px var(--secondary);
-        }
-
-        .feature-list {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-        
-        .feature-pill {
-            background: rgba(129, 140, 248, 0.15);
-            color: #a5b4fc;
-            padding: 10px 24px;
-            border-radius: 100px;
-            font-size: 1rem;
-            border: 1px solid rgba(129, 140, 248, 0.4);
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(129, 140, 248, 0.2);
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 100px;
-            border-top: 1px solid var(--card-border);
-            padding-top: 40px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* ANIMATIONS */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-    </style>
-</head>
-<body>
-
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="ambient-light"></div>
 
     <div class="container">
-        <header>
-            <img src="logo_fullWhite.png" alt="FISTO FSO Logo" class="logo">
-            
-            <h1>FISTO POOL</h1>
-            <div class="subtitle">FSO IT CLUB DOCUMENTATION</div>
+      <header>
+        <img src="logo_fullWhite.png" alt="FISTO FSO Logo" class="logo" />
 
-            <div class="social-bar">
-                <a href="https://wa.me/212681698731" target="_blank" class="social-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.585 1.961.893 3.056.893 3.179 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm0 15.954c-2.135 0-4.184-.557-5.985-1.517l-6.654 1.744 1.774-6.485c-1.03-1.966-1.678-4.153-1.679-6.485 0-7.614 6.194-13.809 13.806-13.809 7.615 0 13.811 6.195 13.811 13.809 0 7.614-6.196 13.81-13.81 13.81z"/></svg>
-                    <span>+212 681-698731</span>
-                </a>
-                <a href="https://instagram.com/fisto.clubit.fso" target="_blank" class="social-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    <span>@fisto.clubit.fso</span>
-                </a>
-                <a href="mailto:fisto.clubit.fso@gmail.com" class="social-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>
-                    <span>fisto.clubit.fso@gmail.com</span>
-                </a>
+        <h1>FISTO POOL</h1>
+        <div class="subtitle">FSO IT CLUB DOCUMENTATION</div>
+
+        <div class="social-bar">
+          <a
+            href="https://wa.me/212681698731"
+            target="_blank"
+            class="social-link"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path
+                d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.585 1.961.893 3.056.893 3.179 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm0 15.954c-2.135 0-4.184-.557-5.985-1.517l-6.654 1.744 1.774-6.485c-1.03-1.966-1.678-4.153-1.679-6.485 0-7.614 6.194-13.809 13.806-13.809 7.615 0 13.811 6.195 13.811 13.809 0 7.614-6.196 13.81-13.81 13.81z"
+              />
+            </svg>
+            <span>+212 681-698731</span>
+          </a>
+          <a
+            href="https://instagram.com/fisto.clubit.fso"
+            target="_blank"
+            class="social-link"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+              />
+            </svg>
+            <span>@fisto.clubit.fso</span>
+          </a>
+          <a href="mailto:fisto.clubit.fso@gmail.com" class="social-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path
+                d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"
+              />
+            </svg>
+            <span>fisto.clubit.fso@gmail.com</span>
+          </a>
+        </div>
+      </header>
+
+      <section class="protocol-card">
+        <h2 class="protocol-title">General Directions</h2>
+        <ul class="rules-list">
+          <li>Respect file naming & placement (e.g., DAY1, DAY2).</li>
+          <li>Follow <code>001 video</code> to learn Fork & PR.</li>
+          <li>
+            Fill <strong>README.md</strong> with Fullname, Age, Discord ID,
+            Establishment.
+          </li>
+          <li>Create a GitHub account and link to Discord.</li>
+          <li>Ask peers about concepts, NOT answers.</li>
+          <li>Copy Pasting from AI is an instant disqualification</li>
+        </ul>
+      </section>
+
+      <section class="day-section">
+        <div class="day-header">
+          <h2>DAY 1</h2>
+          <span class="day-meta">Basics & Commits</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Sanity Check</h3>
+              <span class="badge">C00</span>
             </div>
-        </header>
+            <p class="card-desc">
+              Create <code>hello.c</code> that prints “Hello world”. Goal: Test
+              commits/PRs.
+            </p>
+          </div>
 
-        <section class="protocol-card">
-            <h2 class="protocol-title">General Directions</h2>
-            <ul class="rules-list">
-                <li>Respect file naming & placement (e.g., DAY1, DAY2).</li>
-                <li>Follow <code>001 video</code> to learn Fork & PR.</li>
-                <li>Fill <strong>README.md</strong> with Fullname, Age, Discord ID, Establishment.</li>
-                <li>Create a GitHub account and link to Discord.</li>
-                <li>Ask peers about concepts, NOT answers.</li>
-                <li>Copy Pasting from AI is an instant disqualification</li>
-            </ul>
-        </section>
-
-        <section class="day-section">
-            <div class="day-header">
-                <h2>DAY 1</h2>
-                <span class="day-meta">Basics & Commits</span>
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Print Char</h3>
+              <span class="badge">C01</span>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Sanity Check</h3>
-                        <span class="badge">C00</span>
-                    </div>
-                    <p class="card-desc">Create <code>hello.c</code> that prints “Hello world”. Goal: Test commits/PRs.</p>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Print Char</h3>
-                        <span class="badge">C01</span>
-                    </div>
-                    <p class="card-desc">Create <code>character.c</code> that prints a character. Allowed function: <code>write</code>.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">void</span> <span class="func">print_char</span>(<span class="kwd">char</span> <span class="arg">a</span>) {
+            <p class="card-desc">
+              Create <code>character.c</code> that prints a character. Allowed
+              function: <code>write</code>.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">void</span> <span class="func">print_char</span>(<span class="kwd">char</span> <span class="arg">a</span>) {
 }</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Print Alphabet</h3>
-                        <span class="badge">C02</span>
-                    </div>
-                    <p class="card-desc">Create <code>print_alphabet.c</code>. Print alphabet in one line (lowercase) Allowed function: <code>write</code>.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">void</span> <span class="func">print_alphabet</span>(<span class="kwd">void</span>) {
-}</code></pre>
-                    </div>
-                </div>
             </div>
-        </section>
+          </div>
 
-        
-        <section class="day-section">
-            <div class="day-header">
-                <h2>DAY 2</h2>
-                <span class="day-meta">Math & Input</span>
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Print Alphabet</h3>
+              <span class="badge">C02</span>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Interactive Calc</h3>
-                        <span class="badge">C03</span>
-                    </div>
-                    <p class="card-desc">Create <code>calc.c</code>. Ask user for operation and two numbers (float), show result.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">void</span> <span class="func">calc</span>(<span class="kwd">void</span>) {
+            <p class="card-desc">
+              Create <code>print_alphabet.c</code>. Print alphabet in one line
+              (lowercase) Allowed function: <code>write</code>.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">void</span> <span class="func">print_alphabet</span>(<span class="kwd">void</span>) {
 }</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Factorial</h3>
-                        <span class="badge">C04</span>
-                    </div>
-                    <p class="card-desc">Create <code>fact.c</code>. Return factorial of <code>nb</code> using recursion.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">int</span> <span class="func">factorial</span>(<span class="kwd">int</span> <span class="arg">nb</span>) {
-}</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Square Root</h3>
-                        <span class="badge">C05</span>
-                    </div>
-                    <p class="card-desc">Create <code>sqrt(x).c</code>. Return square root rounded down.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">int</span> <span class="func">sqrt_x</span>(<span class="kwd">int</span> <span class="arg">nb</span>) {
-}</code></pre>
-                    </div>
-                </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <section class="day-section">
-            <div class="day-header">
-                <h2>DAY 3</h2>
-                <span class="day-meta">Arrays I</span>
+      <section class="day-section">
+        <div class="day-header">
+          <h2>DAY 2</h2>
+          <span class="day-meta">Math & Input</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Interactive Calc</h3>
+              <span class="badge">C03</span>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Min / Max</h3>
-                        <span class="badge">C06</span>
-                    </div>
-                    <p class="card-desc">Create <code>minmax.c</code>. Return min and max of array parameter.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">int</span> <span class="func">min_max</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>, <span class="kwd"></span> <span class="arg"></span>) {
+            <p class="card-desc">
+              Create <code>calc.c</code>. Ask user for operation and two numbers
+              (float), show result.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">void</span> <span class="func">calc</span>(<span class="kwd">void</span>) {
 }</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Remove Int</h3>
-                        <span class="badge">C07</span>
-                    </div>
-                    <p class="card-desc">Create <code>remove_int.c</code>. Remove target whenever found in array.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">void</span> <span class="func">remove_int</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>, <span class="kwd">int</span> <span class="arg">size</span>, <span class="kwd">int</span> <span class="arg">target</span>) {
-}</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Insert Position</h3>
-                        <span class="badge">C08</span>
-                    </div>
-                    <p class="card-desc">Create <code>if_insert_pos.c</code>. Return index if found, else return where it would be.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">int</span> <span class="func">if_insert_pos</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>, <span class="kwd">int</span> <span class="arg">size</span>, <span class="kwd">int</span> <span class="arg">n</span>) {
-}</code></pre>
-                    </div>
-                </div>
             </div>
-        </section>
+          </div>
 
-        <section class="day-section">
-            <div class="day-header">
-                <h2>DAY 4</h2>
-                <span class="day-meta">Logic & Loops</span>
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Factorial</h3>
+              <span class="badge">C04</span>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Multiplication Table</h3>
-                        <span class="badge">C09</span>
-                    </div>
-                    <p class="card-desc">Create <code>f_tableau_multi.c</code>. Show table (0-10) for input int.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">void</span> <span class="func">f_tableau_multi</span>(<span class="kwd">int</span> <span class="arg">n</span>) {
+            <p class="card-desc">
+              Create <code>fact.c</code>. Return factorial of
+              <code>nb</code> using recursion.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">int</span> <span class="func">factorial</span>(<span class="kwd">int</span> <span class="arg">nb</span>) {
 }</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Sum Digits</h3>
-                        <span class="badge">C10</span>
-                    </div>
-                    <p class="card-desc">Create <code>sum_digits.c</code>. Return sum from 0 to int n.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">int</span> <span class="func">sum_digits</span>(<span class="kwd">int</span> <span class="arg">n</span>) {
-}</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Power of 2</h3>
-                        <span class="badge">C11</span>
-                    </div>
-                    <p class="card-desc">Create <code>f_ispowerof2.c</code>. Check if x is exact power of 2.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">int</span> <span class="func">f_ispowerof2</span>(<span class="kwd">int</span> <span class="arg">x</span>) {
-}</code></pre>
-                    </div>
-                </div>
             </div>
-        </section>
+          </div>
 
-        <section class="day-section">
-            <div class="day-header">
-                <h2>DAY 5</h2>
-                <span class="day-meta">Arrays II</span>
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Square Root</h3>
+              <span class="badge">C05</span>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Sum Array</h3>
-                        <span class="badge">C12</span>
-                    </div>
-                    <p class="card-desc">Create <code>sum_array.c</code>. Print sum of 5-int array.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">int</span> <span class="func">sum_array</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>) {
+            <p class="card-desc">
+              Create <code>sqrt(x).c</code>. Return square root rounded down.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">int</span> <span class="func">sqrt_x</span>(<span class="kwd">int</span> <span class="arg">nb</span>) {
 }</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Reverse Array</h3>
-                        <span class="badge">C13</span>
-                    </div>
-                    <p class="card-desc">Create <code>reverse_array.c</code>. Print 5-int array in reverse.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">void</span> <span class="func">reverse_array</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>) {
-}</code></pre>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Two Sum</h3>
-                        <span class="badge">C14</span>
-                    </div>
-                    <p class="card-desc">Create <code>twosum.c</code>. Return indices adding to target. <br><em>Ex: {2,7,11,15}, T=22 → [1,3]</em></p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">void</span> <span class="func">two_sum</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>, <span class="kwd">int</span> <span class="arg">size</span>, <span class="kwd">int</span> <span class="arg">target</span>) {
-}</code></pre>
-                    </div>
-                </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <section class="day-section">
-            <div class="day-header">
-                <h2>DAY 6</h2>
-                <span class="day-meta">Advanced Recursion</span>
+      <section class="day-section">
+        <div class="day-header">
+          <h2>DAY 3</h2>
+          <span class="day-meta">Arrays I</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Min / Max</h3>
+              <span class="badge">C06</span>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Fibonacci (Tail)</h3>
-                        <span class="badge">C15</span>
-                    </div>
-                    <p class="card-desc">Create <code>fibio.c</code>. Calculate F(n) using <strong>tail recursion</strong>.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">long long</span> <span class="func">fib_tail</span>(<span class="kwd">int</span> <span class="arg">n</span>, <span class="kwd">long long</span> <span class="arg">a</span>, <span class="kwd">long long</span> <span class="arg">b</span> {
+            <p class="card-desc">
+              Create <code>minmax.c</code>. Return min and max of array
+              parameter.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">int</span> <span class="func">min_max</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>, <span class="kwd"></span> <span class="arg"></span>) {
 }</code></pre>
-                    </div>
-                </div>
+            </div>
+          </div>
 
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Power of 3</h3>
-                        <span class="badge">C16</span>
-                    </div>
-                    <p class="card-desc">Create <code>is_powerof3.c</code>. Return true if power of 3.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">bool</span> <span class="func">is_powerof3</span>(<span class="kwd">int</span> <span class="arg">n</span>) {
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Remove Int</h3>
+              <span class="badge">C07</span>
+            </div>
+            <p class="card-desc">
+              Create <code>remove_int.c</code>. Remove target whenever found in
+              array.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">void</span> <span class="func">remove_int</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>, <span class="kwd">int</span> <span class="arg">size</span>, <span class="kwd">int</span> <span class="arg">target</span>) {
 }</code></pre>
-                    </div>
-                </div>
+            </div>
+          </div>
 
-                <div class="card">
-                    <div class="card-top">
-                        <h3 class="card-title">Palindrome (Tail)</h3>
-                        <span class="badge">C17</span>
-                    </div>
-                    <p class="card-desc">Create <code>valid_palindrom.c</code>. Check palindrome using <strong>tail-end</strong> recursion.</p>
-                    <div class="code-wrapper">
-                        <pre><code><span class="kwd">bool</span> <span class="func">is_pal_tail</span>(<span class="kwd">char *</span> <span class="arg">s</span>) {
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Insert Position</h3>
+              <span class="badge">C08</span>
+            </div>
+            <p class="card-desc">
+              Create <code>if_insert_pos.c</code>. Return index if found, else
+              return where it would be.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">int</span> <span class="func">if_insert_pos</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>, <span class="kwd">int</span> <span class="arg">size</span>, <span class="kwd">int</span> <span class="arg">n</span>) {
 }</code></pre>
-                    </div>
-                </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <section class="day-section">
-            <div class="day-header">
-                <h2>DAY 7</h2>
-                <span class="day-meta">The Final Boss</span>
+      <section class="day-section">
+        <div class="day-header">
+          <h2>DAY 4</h2>
+          <span class="day-meta">Logic & Loops</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Multiplication Table</h3>
+              <span class="badge">C09</span>
             </div>
-            <div class="grid">
-                <div class="card boss-card">
-                    <h3>Simple CLI Calculator</h3>
-                    <p class="card-desc" style="max-width: 600px; margin: 0 auto; color: #cbd5e1;">
-                        Create a Command Line Interface Calculator with History of 5 last calculations.
-                    </p>
-                    <div class="feature-list">
-                        <span class="feature-pill">Basic: +, -, *, /</span>
-                        <span class="feature-pill">Advanced: fact, sqrt(x), pwr(2), pwr(3)</span>
-                    </div>
-                </div>
+            <p class="card-desc">
+              Create <code>f_tableau_multi.c</code>. Show table (0-10) for input
+              int.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">void</span> <span class="func">f_tableau_multi</span>(<span class="kwd">int</span> <span class="arg">n</span>) {
+}</code></pre>
             </div>
-        </section>
-        <footer>
-            &copy; 2025 FISTO FSO IT CLUB. Designed for FISTO POOL.
-        </footer>
+          </div>
+
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Sum Digits</h3>
+              <span class="badge">C10</span>
+            </div>
+            <p class="card-desc">
+              Create <code>sum_digits.c</code>. Return sum from 0 to int n.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">int</span> <span class="func">sum_digits</span>(<span class="kwd">int</span> <span class="arg">n</span>) {
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Power of 2</h3>
+              <span class="badge">C11</span>
+            </div>
+            <p class="card-desc">
+              Create <code>f_ispowerof2.c</code>. Check if x is exact power of
+              2.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">int</span> <span class="func">f_ispowerof2</span>(<span class="kwd">int</span> <span class="arg">x</span>) {
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="day-section">
+        <div class="day-header">
+          <h2>DAY 5</h2>
+          <span class="day-meta">Arrays II</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Sum Array</h3>
+              <span class="badge">C12</span>
+            </div>
+            <p class="card-desc">
+              Create <code>sum_array.c</code>. Print sum of 5-int array.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">int</span> <span class="func">sum_array</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>) {
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Reverse Array</h3>
+              <span class="badge">C13</span>
+            </div>
+            <p class="card-desc">
+              Create <code>reverse_array.c</code>. Print 5-int array in reverse.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">void</span> <span class="func">reverse_array</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>) {
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Two Sum</h3>
+              <span class="badge">C14</span>
+            </div>
+            <p class="card-desc">
+              Create <code>twosum.c</code>. Return indices adding to target.
+              <br /><em>Ex: {2,7,11,15}, T=22 → [1,3]</em>
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">void</span> <span class="func">two_sum</span>(<span class="kwd">int</span> <span class="arg">arr[]</span>, <span class="kwd">int</span> <span class="arg">size</span>, <span class="kwd">int</span> <span class="arg">target</span>) {
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="day-section">
+        <div class="day-header">
+          <h2>DAY 6</h2>
+          <span class="day-meta">Advanced Recursion</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Fibonacci (Tail)</h3>
+              <span class="badge">C15</span>
+            </div>
+            <p class="card-desc">
+              Create <code>fibio.c</code>. Calculate F(n) using
+              <strong>tail recursion</strong>.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">long long</span> <span class="func">fib_tail</span>(<span class="kwd">int</span> <span class="arg">n</span>, <span class="kwd">long long</span> <span class="arg">a</span>, <span class="kwd">long long</span> <span class="arg">b</span> {
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Power of 3</h3>
+              <span class="badge">C16</span>
+            </div>
+            <p class="card-desc">
+              Create <code>is_powerof3.c</code>. Return true if power of 3.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">bool</span> <span class="func">is_powerof3</span>(<span class="kwd">int</span> <span class="arg">n</span>) {
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-top">
+              <h3 class="card-title">Palindrome (Tail)</h3>
+              <span class="badge">C17</span>
+            </div>
+            <p class="card-desc">
+              Create <code>valid_palindrom.c</code>. Check palindrome using
+              <strong>tail-end</strong> recursion.
+            </p>
+            <div class="code-wrapper">
+              <pre><code><span class="kwd">bool</span> <span class="func">is_pal_tail</span>(<span class="kwd">char *</span> <span class="arg">s</span>) {
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="day-section">
+        <div class="day-header">
+          <h2>DAY 7</h2>
+          <span class="day-meta">The Final Boss</span>
+        </div>
+        <div class="grid">
+          <div class="card boss-card">
+            <h3>Simple CLI Calculator</h3>
+            <p
+              class="card-desc"
+              style="max-width: 600px; margin: 0 auto; color: #cbd5e1"
+            >
+              Create a <code>cli_calculator.c</code> file which is : Command
+              Line Interface Calculator with History of 5 last calculations.
+            </p>
+            <div class="feature-list">
+              <span class="feature-pill">Basic: +, -, *, /</span>
+              <span class="feature-pill"
+                >Advanced: fact, sqrt(x), pwr(2), pwr(3)</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer>&copy; 2025 FISTO FSO IT CLUB. Designed for FISTO POOL.</footer>
     </div>
-
-</body>
+  </body>
 </html>
